@@ -627,6 +627,12 @@ class PrettyPrinter :
     return printed_pattern;
   }
 
+  Doc VisitExpr_(const FatalNode* op) final {
+    Doc doc;
+    doc << "Fatal(" << PrintString(op->msg) << ")";
+    return doc;
+  }
+
   Doc VisitPattern_(const PatternConstructorNode* p) final {
     Doc doc;
     doc << p->constructor->name_hint;
