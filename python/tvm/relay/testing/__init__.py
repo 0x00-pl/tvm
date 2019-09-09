@@ -56,11 +56,11 @@ def run_infer_type(expr):
     return run_opt_pass(expr, transform.InferType())
 
 
-def _np_randn_from_type(t, scale=1):
-    return (scale * np.random.randn(*(int(d) for d in t.shape))).astype(t.dtype)
+def _np_randn_from_type(t, scale=1, mean=0):
+    return (mean + (scale * np.random.randn(*(int(d) for d in t.shape)))).astype(t.dtype)
 
 
-def check_grad(func, inputs=None, eps=1e-6, atol=1e-5, rtol=1e-3):
+def check_grad(func, inputs=None, eps=1e-6, atol=1e-5, rtol=1e-3, scale=None, mean=0):
     """Perform numerical gradient checking given a relay function.
 
     Compare analytical gradients to numerical gradients derived from two-sided approximation. Note
@@ -91,10 +91,13 @@ def check_grad(func, inputs=None, eps=1e-6, atol=1e-5, rtol=1e-3):
     fwd_func = run_infer_type(func)
     bwd_func = run_infer_type(gradient(fwd_func))
 
+    if scale is None:
+        scale = 10 * eps
+
     if inputs is None:
         params = fwd_func.params
         # Generate random inputs on the same scale as epsilon to avoid numerical precision loss.
-        inputs = [_np_randn_from_type(x.checked_type, scale=(10 * eps)) for x in params]
+        inputs = [_np_randn_from_type(x.checked_type, scale=scale, mean=mean) for x in params]
 
     for target, ctx in ctx_list():
         intrp = relay.create_executor(ctx=ctx, target=target)

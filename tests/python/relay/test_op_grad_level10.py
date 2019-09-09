@@ -19,7 +19,9 @@ from tvm.relay.testing import check_grad
 
 
 def test_crossentropy_grad():
-    pass
+    x = relay.var("x", shape=(1, 5))
+    y = relay.var("y", shape=(1, 5))
+    check_grad(relay.Function([x, y], relay.op.nn.cross_entropy(x, y)), eps=0.01, scale=0.1, mean=1)
 
 
 if __name__ == "__main__":
