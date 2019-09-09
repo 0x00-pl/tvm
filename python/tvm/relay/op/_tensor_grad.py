@@ -25,7 +25,18 @@ from ..expr import Tuple, TupleGetItem, const
 from . import nn as _nn
 from .op import register_gradient
 from .reduce import sum as _sum
-from .tensor import cos, exp, less, negative, ones_like, power, sin, zeros_like, equal, shape_of, log
+from .tensor import (
+    cos,
+    exp,
+    less,
+    negative,
+    ones_like,
+    power,
+    sin,
+    zeros_like,
+    equal,
+    shape_of,
+    log)
 from .transform import (
     broadcast_to_like,
     collapse_sum_like,
