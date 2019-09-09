@@ -380,13 +380,3 @@ def batch_norm_grad(orig, grad):
 def split_grad(orig, grad):
     # return zero
     return [orig.args[0]]
-
-
-@register_gradient("nn.cross_entropy")
-def cross_entropy_grad(orig, grad):
-    x, y = orig.args
-    sm = softmax(x)
-    shape = shape_of(x)
-    batch_size = take(shape, const(0, dtype='int32'), axis=0)
-    grad = grad / batch_size.astype('float32')
-    return [reduce_sum(y, axis=1) * grad * (sm - y), -grad * log(sm)]
