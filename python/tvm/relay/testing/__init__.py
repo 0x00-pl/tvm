@@ -86,6 +86,11 @@ def check_grad(func, inputs=None, eps=1e-6, atol=1e-5, rtol=1e-3, scale=None, me
         The relative tolerance on difference between numerical and analytical gradients. Note that
         this needs to be scaled appropriately relative to the chosen eps.
 
+    scale: float
+        The standard deviation of the inputs.
+
+    mean: float
+        The mean of the inputs.
     """
 
     fwd_func = run_infer_type(func)
