@@ -303,12 +303,6 @@ def dense_grad(orig, grad):
             collapse_sum_like(data * transpose(grad), weight)]
 
 # UNTESTED
-@register_gradient("reshape")
-def reshape_grad(orig, grad):
-    return [reshape_like(grad, orig.args[0])]
-
-
-# UNTESTED
 @register_gradient("take")
 def take_grad(orig, grad):
     x, y = orig.args
